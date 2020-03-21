@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace Ahorcado_C_SHARP
 {
@@ -18,6 +19,8 @@ namespace Ahorcado_C_SHARP
         int partidasGanadas = 0;//Contador partidas ganadas
         int partidasPerdidas = 0;//Contador partidas perdidas
         bool partidaTerminada = false;//Indica si la partida ha terminado
+        SoundPlayer bien= new SoundPlayer();
+        
 
         List<Button> listaBotones = new List<Button>();//Guardamos los botones que han sido pulsados
         public Form1()
@@ -50,6 +53,7 @@ namespace Ahorcado_C_SHARP
                 letra = letra.ToUpper();
                 chequeaLetra(letra);
                 listaBotones.Add(b);
+
             }
 
 
@@ -61,8 +65,7 @@ namespace Ahorcado_C_SHARP
         {
             if (palabraOculta.Contains(letra))//Si la letra esta
             {
-
-
+               
                 for (int i = 0; i < palabraOculta.Length; i++)//Ponemos la letra en los huecos correspondientes
                 {
                     if (palabraOculta[i] == letra[0])
@@ -71,6 +74,9 @@ namespace Ahorcado_C_SHARP
                         label1.Text = label1.Text.Substring(0, 2 * i)
                                 + letra
                                 + label1.Text.Substring(2 * i + 1);
+
+                        bien.SoundLocation = "C:/Users/rocio/source/repos/Ahorcado_C_SHARP/Ahorcado_C_SHARP/Resources/bien.wav";
+                        bien.Play();
                     }
                 }
                 if (!label1.Text.Contains('_'))//Si la etiqueta no tiene guiones es que la partida no está terminada
@@ -101,21 +107,24 @@ namespace Ahorcado_C_SHARP
                 }
 
             }
-
-            //Elegimos la foto correspondiente
+            SoundPlayer Player = new SoundPlayer();
+            Player.SoundLocation = "C:/Users/rocio/source/repos/Ahorcado_C_SHARP/Ahorcado_C_SHARP/Resources/mal.wav";
             switch (nFallos)
             {
+            
                 case 0: pictureBox1.Image = Properties.Resources.img0; break;
-                case 1: pictureBox1.Image = Properties.Resources.img1; break;
-                case 2: pictureBox1.Image = Properties.Resources.img2; break;
-                case 3: pictureBox1.Image = Properties.Resources.img3; break;
-                case 4: pictureBox1.Image = Properties.Resources.img4; break;
-                case 5: pictureBox1.Image = Properties.Resources.img5; break;
-                case 6: pictureBox1.Image = Properties.Resources.img6; break;
-                case -100: pictureBox1.Image = Properties.Resources.win; break;
+                case 1: pictureBox1.Image = Properties.Resources.img1; Player.Play(); break;
+                case 2: pictureBox1.Image = Properties.Resources.img2; Player.Play(); break;
+                case 3: pictureBox1.Image = Properties.Resources.img3; Player.Play(); break;
+                case 4: pictureBox1.Image = Properties.Resources.img4; Player.Play(); break;
+                case 5: pictureBox1.Image = Properties.Resources.img5; Player.Play(); break;
+                case 6: pictureBox1.Image = Properties.Resources.img6; Player.Play(); break;
+                case -100: pictureBox1.Image = Properties.Resources.win; bien.Play(); break;
                 default: pictureBox1.Image = Properties.Resources.img6; break;
             }
         }
+
+       
 
         //Va a seleccionar al azar una palabra de un array de palabras
         private String eligePalabra()
@@ -129,27 +138,14 @@ namespace Ahorcado_C_SHARP
             return listaPalabras[posicion].ToUpper();
         }
 
-        //Al pulsar se reinicia
-        private void reiniciar(object sender, EventArgs e)
-        {
+     
+   
+           
+        
 
-            guionesIniciales();
-            partidaTerminada = false;
-            nFallos = 0;
-            pictureBox1.Image = Properties.Resources.img0;
-
-
-            foreach (Button item in listaBotones) // Volvemos a habilitar los botones pulsados en la partida anterior
-            {
-                item.Enabled = true;
-            }
-
-            //Vaciamos la lista de botones
-            listaBotones.Clear();
-            //Ponemos el botón de reiniciar invisible de nuevo
-            
-        }
 
 
     }
+ 
+     
 }
